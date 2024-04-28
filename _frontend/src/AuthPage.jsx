@@ -1,9 +1,17 @@
+import axios from 'axios'
+import PropTypes from 'prop-types';
 const AuthPage = (props) => {
     const onSubmit = (e) => {
-      e.preventDefault();
-      const { value } = e.target[0];
-      props.onAuth({ username: value, secret: value });
-    };
+        e.preventDefault();
+        const { value } = e.target[0];
+        axios.post("http://localhost:3001/authenticate", { username: value })
+          .then((r) => {
+            props.onAuth({ ...r.data, secret: value });
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      };
   
     return (
       <div className="background">
@@ -22,6 +30,10 @@ const AuthPage = (props) => {
         </form>
       </div>
     );
+  };
+
+  AuthPage.propTypes = {
+    onAuth: PropTypes.func.isRequired,
   };
   
   export default AuthPage;
