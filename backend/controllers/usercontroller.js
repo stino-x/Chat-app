@@ -1,4 +1,4 @@
-import User from "../models/user.model.js";
+import User from "../models/usermodel.js";
 
 class Usercontroller {
     static getUsersForSidebar =  async (req, res) => {
