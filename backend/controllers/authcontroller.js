@@ -1,4 +1,4 @@
-import User from "../models/usermodel";
+import User from "../models/usermodel.js";
 import bcrypt from "bcryptjs";
 import generateTokenAndSetCookie from "../utils/generateToken.js";
 
@@ -17,7 +17,7 @@ class AuthController {
                 return res.status(400).json({ error: "Username already exists" });
             }
 
-            const salt = await bcrypt.genSalt(20);
+            const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(password, salt);
 
             const profilePicUrl = `https://avatar.iran.liara.run/public/${gender === "male" ? "boy" : "girl"}?username=${username}`;
