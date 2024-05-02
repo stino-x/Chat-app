@@ -4,4 +4,4 @@
 #USers
 you can signin to test the app using these params:
 username: User1
-password: password 
+password: password
