@@ -1,34 +1,40 @@
 import express from 'express';
+import path from "path";
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';  // Import cors package
 import authRoutes from './routes/auth.routes.js';
 import messageRoutes from './routes/message.routes.js';
 import userRoutes from './routes/user.routes.js';
 import connectToMongoDB from './db/connecttoDB.js';
 import { app, server } from "./socket/socket.js";
+import { fileURLToPath } from 'url';
 
-dotenv.config();  // Load environment variables
+dotenv.config();
 
 app.use(express.json());
 app.use(cookieParser());
 
-const PORT = process.env.PORT || 5000;
+// Enable CORS for requests from your frontend
+app.use(cors({
+  origin: 'https://chat-app-lilac-one.vercel.app',  // Replace with your Vercel frontend URL
+  credentials: true,  // If your requests include cookies, authorization headers, or TLS client certificates
+}));
 
-// API Routes
+const PORT = process.env.PORT || 5000;
+// const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 app.use('/api/auth', authRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/users', userRoutes);
 
-// Remove or comment out static file serving
 // app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
-// Remove or comment out the catch-all route for frontend
 // app.get("*", (req, res) => {
-//    res.send("Not Found"); // or handle it differently for API-only server
+//   res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
 // });
 
-// Start the server and connect to MongoDB
 server.listen(PORT, () => {
-	connectToMongoDB();
-	console.log(`Server Running on port ${PORT}`);
+  connectToMongoDB();
+  console.log(`Server Running on port ${PORT}`);
 });
