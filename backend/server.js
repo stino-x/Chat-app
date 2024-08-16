@@ -15,21 +15,33 @@ dotenv.config();
 app.use(express.json());
 app.use(cookieParser());
 
-// Enable CORS for requests from your frontend
+// Update your CORS configuration to handle multiple origins
+const allowedOrigins = [
+  'https://chat-app-lilac-one.vercel.app',
+  'https://chat-97jj4wuij-augustines-projects-0193fa04.vercel.app'
+];
+
 app.use(cors({
-  origin: 'https://chat-app-lilac-one.vercel.app',  // Replace with your Vercel frontend URL
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like curl or Postman) or match against allowedOrigins
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,  // If your requests include cookies, authorization headers, or TLS client certificates
 }));
 
 const PORT = process.env.PORT || 5000;
+
+// Commented out because you're serving the frontend separately
 // const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-app.use('/api/auth', authRoutes);
-app.use('/api/messages', messageRoutes);
-app.use('/api/users', userRoutes);
-
+// Commented out because you're serving the frontend separately
 // app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
+// Commented out because you're serving the frontend separately
 // app.get("*", (req, res) => {
 //   res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
 // });
